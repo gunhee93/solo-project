@@ -1,2 +1,11 @@
-package project.solo.first.user.domain;public class Role {
+package project.solo.first.user.domain;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum Role {
+
+    ROLE_USER, ROLE_ADMIN;
 }
