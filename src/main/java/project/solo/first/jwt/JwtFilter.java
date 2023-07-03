@@ -1,8 +1,11 @@
 package project.solo.first.jwt;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.solo.first.common.util.RedisUtil;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,14 +20,21 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer";
 
     private final TokenProvider tokenProvider;
+    private final RedisUtil redisUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String access = resolveToken(request);
 
-        if (StringUtils.hasText(access)) {
-
+        if (StringUtils.hasText(access) && tokenProvider.validateToken(access)) {
+            String logoutToken = redisUtil.getData(access);
+            if (!"logout".equals(logoutToken)) {
+                Authentication authentication = tokenProvider.getAuthentication(access);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
@@ -33,5 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
+
+        return null;
     }
 }
