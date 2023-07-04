@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    default: local
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -9,17 +12,23 @@ spring:
       mail.smtp.starttls.enable: true
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/sassy
+    url: jdbc:h2:tcp://localhost/~/solo
     driver-class-name: org.h2.Driver
     username: sa
     password: 1
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
+#        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100
 
 logging.level:
   org.hibernate.SQL: debug

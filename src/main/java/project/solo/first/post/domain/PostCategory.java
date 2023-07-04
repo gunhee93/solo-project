@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor
+@Table(name = "POST_CATEGORY")
 public class PostCategory {
 
     @Id @GeneratedValue
