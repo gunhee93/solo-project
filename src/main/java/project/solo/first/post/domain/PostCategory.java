@@ -1,5 +1,6 @@
 package project.solo.first.post.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "POST_CATEGORY")
 public class PostCategory {
 
@@ -16,13 +17,14 @@ public class PostCategory {
     @Column(name = "post_category_id")
     private Long id;
 
-    @OneToMany(mappedBy = "category")
-    private List<Post> postList = new ArrayList<>();
-
+    @Column(name = "category_name")
     private String name;
 
-    // 매핑된 list 에 데이터를 넣어주는 메서드
-    public void mappingPost(Post post) {
-        this.postList.add(post);
+    private Long parentId;
+
+
+    public PostCategory(String name, Long parentId) {
+        this.name = name;
+        this.parentId = parentId;
     }
 }

@@ -53,11 +53,6 @@ public class Post {
     private String content;
 
 
-    public void mappingCategory(PostCategory postCategory) {
-        this.postCategory = postCategory;
-        postCategory.mappingPost(this);
-    }
-
     public void mappingComments(Comment comment) {
         this.comments.add(comment);
     }
