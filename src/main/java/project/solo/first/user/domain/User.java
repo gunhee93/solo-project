@@ -46,4 +46,9 @@ public class User {
                 .role(role)
                 .build();
     }
+
+    //      패스워드 인코딩
+    public void encodingPassword(String password) {
+        this.password = password;
+    }
 }

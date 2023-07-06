@@ -33,8 +33,8 @@ public class Post {
     private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_category_id")
-    private PostCategory postCategory;
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -57,14 +57,18 @@ public class Post {
         this.comments.add(comment);
     }
 
+    public void mappingCategory(Category category){
+        this.category = category;
+        category.mappingPost(this);
+    }
     public void postCount() {
         this.count++;
     }
 
     @Builder
-    public Post(PostCategory postCategory, User user, List<Comment> comments, String title, String content,
+    public Post(Category category, User user, List<Comment> comments, String title, String content,
                 LocalDateTime createdAt, LocalDateTime modifiedAt) {
-        this.postCategory = postCategory;
+        this.category = category;
         this.user = user;
         this.comments = comments;
         this.title = title;
