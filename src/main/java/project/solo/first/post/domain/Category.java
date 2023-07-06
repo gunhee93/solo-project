@@ -10,21 +10,20 @@ import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "POST_CATEGORY")
-public class PostCategory {
+@Table(name = "CATEGORY")
+public class Category {
 
-    @Id @GeneratedValue
-    @Column(name = "post_category_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_name")
+    @Column(unique = true)
     private String name;
 
-    private Long parentId;
+    @OneToMany(mappedBy = "category")
+    private List<Post> postList = new ArrayList<>();
 
-
-    public PostCategory(String name, Long parentId) {
-        this.name = name;
-        this.parentId = parentId;
+    public void mappingPost(Post post) {
+        this.postList.add(post);
     }
 }
