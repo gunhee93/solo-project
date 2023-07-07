@@ -15,6 +15,7 @@ import project.solo.first.jwt.dto.TokenResponse;
 import project.solo.first.user.domain.User;
 import project.solo.first.user.dto.LoginRequest;
 import project.solo.first.user.dto.LoginResponse;
+import project.solo.first.user.dto.ProfileResponse;
 import project.solo.first.user.dto.SignupRequest;
 import project.solo.first.user.repository.UserRepository;
 
@@ -69,5 +70,15 @@ public class UserService {
                 .orElseThrow(() -> {
                     throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
                 });
+    }
+
+    public ProfileResponse getProfile(Long userId) {
+        User findUser = findById(userId);
+
+        return new ProfileResponse(
+                findUser.getLoginId(),
+                findUser.getEmail(),
+                findUser.getNickname()
+        );
     }
 }
