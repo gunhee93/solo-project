@@ -4,14 +4,13 @@ package project.solo.first.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.solo.first.common.code.SuccessCode;
 import project.solo.first.common.response.ApiResponse;
+import project.solo.first.common.util.SecurityUtil;
 import project.solo.first.user.dto.LoginRequest;
 import project.solo.first.user.dto.LoginResponse;
+import project.solo.first.user.dto.ProfileResponse;
 import project.solo.first.user.dto.SignupRequest;
 import project.solo.first.user.service.UserService;
 
@@ -48,5 +47,12 @@ public class UserController {
         LoginResponse loginResponse = userService.login(loginRequest);
 
         return new ResponseEntity(loginResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity myPage(@PathVariable(value = ("userId")) Long userId) {
+        ProfileResponse userProfile = userService.getProfile(userId);
+
+        return new ResponseEntity(userProfile, HttpStatus.OK);
     }
 }
