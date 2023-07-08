@@ -81,4 +81,21 @@ public class UserService {
                 findUser.getNickname()
         );
     }
+
+    public void logout(String accessToken, String refreshToken) {
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        String redisRefreshToken = redisUtil.getData(userId);
+        if (redisRefreshToken != null) {
+            redisUtil.deleteData(userId);
+        }
+
+        Long expiration = tokenProvider.getExpiration(accessToken);
+        redisUtil.setDataExpire(accessToken, "logout", expiration);
+    }
 }
