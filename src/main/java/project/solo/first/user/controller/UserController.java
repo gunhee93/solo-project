@@ -42,11 +42,22 @@ public class UserController {
         return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity login(LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);
 
         return new ResponseEntity(loginResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(@RequestHeader(value = "Authorization") String acTokenRequest,
+                                 @RequestHeader(value = "RefreshToken") String rfTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        userService.logout(accessToken, refreshToken);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.LOGOUT_SUCCESS), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
