@@ -13,10 +13,7 @@ import project.solo.first.common.util.RedisUtil;
 import project.solo.first.jwt.TokenProvider;
 import project.solo.first.jwt.dto.TokenResponse;
 import project.solo.first.user.domain.User;
-import project.solo.first.user.dto.LoginRequest;
-import project.solo.first.user.dto.LoginResponse;
-import project.solo.first.user.dto.ProfileResponse;
-import project.solo.first.user.dto.SignupRequest;
+import project.solo.first.user.dto.*;
 import project.solo.first.user.repository.UserRepository;
 
 @Service
@@ -98,4 +95,6 @@ public class UserService {
         Long expiration = tokenProvider.getExpiration(accessToken);
         redisUtil.setDataExpire(accessToken, "logout", expiration);
     }
+
+
 }

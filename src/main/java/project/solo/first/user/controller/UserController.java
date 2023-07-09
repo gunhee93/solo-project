@@ -4,14 +4,13 @@ package project.solo.first.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.solo.first.common.code.SuccessCode;
 import project.solo.first.common.response.ApiResponse;
 import project.solo.first.common.util.SecurityUtil;
-import project.solo.first.user.dto.LoginRequest;
-import project.solo.first.user.dto.LoginResponse;
-import project.solo.first.user.dto.ProfileResponse;
-import project.solo.first.user.dto.SignupRequest;
+import project.solo.first.user.dto.*;
+import project.solo.first.user.service.EmailService;
 import project.solo.first.user.service.UserService;
 
 @RestController
@@ -20,6 +19,7 @@ import project.solo.first.user.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity signup(SignupRequest signupRequest) {
@@ -65,5 +65,12 @@ public class UserController {
         ProfileResponse userProfile = userService.getProfile(userId);
 
         return new ResponseEntity(userProfile, HttpStatus.OK);
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity authEmail(@Validated @RequestBody EmailRequest request) {
+        emailService.authEmail(request);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.SEND_EMAIL), HttpStatus.OK);
     }
 }
