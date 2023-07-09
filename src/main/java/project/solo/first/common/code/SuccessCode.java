@@ -9,7 +9,8 @@ public enum SuccessCode {
     LOGIN_SUCCESS("Login", "로그인 되었습니다."),
     CAN_USE_ID("LoginId", "사용 가능한 아이디입니다."),
     CAN_USE_EMAIL("LoginEmail", "사용 가능한 이메일입니다."),
-    LOGOUT_SUCCESS("Logout", "로그아웃 되었습니다.");
+    LOGOUT_SUCCESS("Logout", "로그아웃 되었습니다."),
+    SEND_EMAIL("Email", "인증 코드가 이메일로 발송되었습니다.");
 
     private final String code;
     private final String message;
