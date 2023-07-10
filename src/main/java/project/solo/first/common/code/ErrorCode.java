@@ -16,7 +16,9 @@ public enum ErrorCode {
     // user
     NOT_FOUND_USER(404, "U001", "회원 정보를 찾을 수 없습니다."),
     DUPLICATE_LOGIN_ID(400, "U002", "중복된 아이디 입니다."),
-    DUPLICATE_EMAIL(400, "U003", "중복된 이메일 입니다.");
+    DUPLICATE_EMAIL(400, "U003", "중복된 이메일 입니다."),
+    NOT_MATCHED_CODE(400, "U004", "인증 코드가 틀렸습니다."),
+    NOT_MATCHED_PASSWORD(400, "U005", "비밀번호가 일치하지 않습니다.");
 
     // 에러 코드 상태 반환
     private final int status;
