@@ -51,4 +51,8 @@ public class User {
     public void encodingPassword(String password) {
         this.password = password;
     }
+
+    public void changePassword(String changePassword) {
+        this.password = changePassword;
+    }
 }

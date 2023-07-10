@@ -1,6 +1,7 @@
 package project.solo.first.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,14 +67,15 @@ public class EmailService {
     }
 
     //실제 메일 전송
-    public void sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
+    @SneakyThrows
+    public void sendEmail(String email) {
 
         //메일전송에 필요한 정보 설정
-        MimeMessage emailForm = createEmailForm(toEmail);
+        MimeMessage emailForm = createEmailForm(email);
         //실제 메일 전송
         emailSender.send(emailForm);
 
-        redisUtil.setDataExpire(authNum, toEmail , 60*5L);
+        redisUtil.setDataExpire(authNum, email , 60*5L);
 
     }
 

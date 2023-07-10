@@ -16,6 +16,8 @@ import project.solo.first.user.domain.User;
 import project.solo.first.user.dto.*;
 import project.solo.first.user.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -97,4 +99,43 @@ public class UserService {
     }
 
 
+    public String findLoginId(FindLoginIdRequest findLoginIdRequest) {
+        String redisEmail = redisUtil.getData(findLoginIdRequest.getCode());
+        if (!redisEmail.equals(findLoginIdRequest.getEmail())) {
+            throw new CustomIllegalStateException(ErrorCode.NOT_MATCHED_CODE);
+        }
+
+        User findUserByEmail = userRepository.findByEmail(findLoginIdRequest.getEmail())
+                .orElseThrow(() -> {
+                    throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
+                });
+
+        return findUserByEmail.getLoginId();
+    }
+
+
+    public Long findPassword(FindPasswordRequest findPasswordRequest) {
+        String redisEmail = redisUtil.getData(findPasswordRequest.getCode());
+        if (!redisEmail.equals(findPasswordRequest.getEmail())) {
+            throw new CustomIllegalStateException(ErrorCode.NOT_MATCHED_CODE);
+        }
+
+        User findUser = userRepository
+                .findByEmailAndLoginId(findPasswordRequest.getEmail(), findPasswordRequest.getLoginId())
+                .orElseThrow(() -> {
+                    throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
+                });
+
+        return findUser.getId();
+    }
+
+    public void changePassword(ChangePasswordRequest changePasswordRequest) {
+        if (!changePasswordRequest.getPasswordCheck().equals(changePasswordRequest.getPassword())) {
+            throw new CustomIllegalStateException(ErrorCode.NOT_MATCHED_PASSWORD);
+        }
+
+        User findUser = findById(changePasswordRequest.getUserId());
+        findUser.changePassword(encoder.encode(changePasswordRequest.getPassword()));
+
+    }
 }
