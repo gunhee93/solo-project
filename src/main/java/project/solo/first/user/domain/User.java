@@ -47,11 +47,19 @@ public class User {
                 .build();
     }
 
-    //      패스워드 인코딩
+    // 패스워드 인코딩
     public void encodingPassword(String password) {
         this.password = password;
     }
 
+    // 프로필 수정
+    public void updateProfile(String updatedLoginId, String updatedEmail, String updatedNickname) {
+        this.loginId = updatedLoginId;
+        this.email = updatedEmail;
+        this.nickname = updatedNickname;
+    }
+
+    // 비밀번호 변경
     public void changePassword(String changePassword) {
         this.password = changePassword;
     }

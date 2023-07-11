@@ -65,11 +65,18 @@ public class UserController {
     }
 
     // 마이페이지
-    @GetMapping("/{userId}")
-    public ResponseEntity myPage(@PathVariable(value = ("userId")) Long userId) {
-        ProfileResponse userProfile = userService.getProfile(userId);
+    @GetMapping("/mypage")
+    public ResponseEntity myPage(@RequestHeader(value = "Authorization") String acTokenRequest) {
+        ProfileResponse userProfile = userService.getProfile(acTokenRequest);
 
         return new ResponseEntity(userProfile, HttpStatus.OK);
+    }
+
+    // 정보 수정
+    @PatchMapping("/mypage")
+    public ResponseEntity updateProfile(@RequestHeader(value = "Authorization") String acTokenRequest,
+                                        @Validated @RequestBody UpdateProfileRequest updateProfileRequest) {
+        userService.updateProfile(acTokenRequest, updateProfileRequest);
     }
 
     // 이메일 인증코드 전송
@@ -97,7 +104,7 @@ public class UserController {
     }
 
     // 비밀번호 찾기 이후 비밀번호 변경
-    @PostMapping("/change/password")
+    @PatchMapping("/change/password")
     public ResponseEntity changePassword(@Validated @RequestBody ChangePasswordRequest changePasswordRequest) {
         userService.changePassword(changePasswordRequest);
 
