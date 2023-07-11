@@ -29,6 +29,12 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
 
+    private User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
+                });
+    }
 
     public void signup(SignupRequest signupRequest) {
         User saveUser = signupRequest.toEntity();
@@ -64,23 +70,6 @@ public class UserService {
         return new LoginResponse(requestUser.getNickname(), tokenResponse);
     }
 
-    private User findById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
-                });
-    }
-
-    public ProfileResponse getProfile(Long userId) {
-        User findUser = findById(userId);
-
-        return new ProfileResponse(
-                findUser.getLoginId(),
-                findUser.getEmail(),
-                findUser.getNickname()
-        );
-    }
-
     public void logout(String accessToken, String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
@@ -98,6 +87,37 @@ public class UserService {
         redisUtil.setDataExpire(accessToken, "logout", expiration);
     }
 
+    public ProfileResponse getProfile(String acTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String strUserId = authentication.getName();
+        Long userId = Long.parseLong(strUserId);
+
+        User findUser = findById(userId);
+
+        return new ProfileResponse(
+                findUser.getLoginId(),
+                findUser.getEmail(),
+                findUser.getNickname()
+        );
+    }
+
+    public UpdateProfileResponse updateProfile(String acTokenRequest, UpdateProfileRequest updateProfileRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String strUserId = authentication.getName();
+        Long userId = Long.parseLong(strUserId);
+
+        User findUser = findById(userId);
+
+        String updatedLoginId = updateProfileRequest.getLoginId();
+        String updatedNickname = updateProfileRequest.getNickname();
+        String updatedEmail = updateProfileRequest.getEmail();
+
+        findUser.updateProfile(updatedLoginId, updatedEmail, updatedNickname);
+
+        return new UpdateProfileResponse(updatedLoginId, updatedEmail, updatedNickname);
+    }
 
     public String findLoginId(FindLoginIdRequest findLoginIdRequest) {
         String redisEmail = redisUtil.getData(findLoginIdRequest.getCode());
