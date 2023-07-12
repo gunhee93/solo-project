@@ -20,12 +20,21 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
 
-    // 회원가입
+    // 회원 가입
     @PostMapping("/signup")
     public ResponseEntity signup(SignupRequest signupRequest) {
         userService.signup(signupRequest);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.SIGNUP_SUCCESS), HttpStatus.OK);
+    }
+
+    //회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestHeader(value = "Authorization") String acTokenRequest,
+                                     @RequestBody String password) {
+        userService.deleteUser(acTokenRequest, password);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_USER), HttpStatus.OK);
     }
 
     // 아이디 중복 확인
@@ -76,7 +85,10 @@ public class UserController {
     @PatchMapping("/mypage")
     public ResponseEntity updateProfile(@RequestHeader(value = "Authorization") String acTokenRequest,
                                         @Validated @RequestBody UpdateProfileRequest updateProfileRequest) {
-        userService.updateProfile(acTokenRequest, updateProfileRequest);
+        UpdateProfileResponse updateProfileResponse = userService
+                .updateProfile(acTokenRequest, updateProfileRequest);
+
+        return new ResponseEntity(updateProfileResponse, HttpStatus.OK);
     }
 
     // 이메일 인증코드 전송
@@ -109,5 +121,18 @@ public class UserController {
         userService.changePassword(changePasswordRequest);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.CHANGE_PASSWORD_SUCCESS), HttpStatus.OK);
+    }
+
+    // 토큰 재발급
+    @PostMapping("/reissue")
+    public ResponseEntity reissue(
+            @RequestHeader(value = "Authorization") String acTokenRequest,
+            @RequestHeader(value = "RefreshToken") String rfTokenRequest
+    ) {
+
+
+        userService.reissue(acTokenRequest, rfTokenRequest);
+
+        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 }
