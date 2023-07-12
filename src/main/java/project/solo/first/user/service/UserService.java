@@ -158,4 +158,44 @@ public class UserService {
         findUser.changePassword(encoder.encode(changePasswordRequest.getPassword()));
 
     }
+
+    public void deleteUser(String acTokenRequest, String password) {
+        String accessToken = acTokenRequest.substring(7);
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String strUserId = authentication.getName();
+        Long userId = Long.parseLong(strUserId);
+
+        User findUser = findById(userId);
+
+        if (!findUser.getPassword().equals(password)) {
+            throw new CustomIllegalStateException(ErrorCode.NOT_MATCHED_PASSWORD);
+        }
+
+        userRepository.delete(findUser);
+    }
+
+    public TokenResponse reissue(String acTokenRequest, String rfTokenRequest) {
+        String accessToken = acTokenRequest.substring(7);
+        String refreshToken = rfTokenRequest.substring(7);
+
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String userId = authentication.getName();
+
+        String redisRefreshToken = redisUtil.getData(userId);
+        if (redisRefreshToken == null) {
+            throw new CustomIllegalStateException(ErrorCode.INVALID_TOKEN);
+        }
+        if (!refreshToken.equals(redisRefreshToken)) {
+            throw new CustomIllegalStateException(ErrorCode.NO_MATCHED_INFO);
+        }
+
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+        redisUtil.setDataExpire(userId, tokenResponse.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        return tokenResponse;
+    }
 }
