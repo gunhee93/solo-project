@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.solo.first.common.code.SuccessCode;
 import project.solo.first.common.response.ApiResponse;
+import project.solo.first.jwt.dto.TokenResponse;
 import project.solo.first.user.dto.*;
 import project.solo.first.user.service.EmailService;
 import project.solo.first.user.service.UserService;
@@ -22,7 +23,7 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/signup")
-    public ResponseEntity signup(SignupRequest signupRequest) {
+    public ResponseEntity signup(@Validated @RequestBody SignupRequest signupRequest) {
         userService.signup(signupRequest);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.SIGNUP_SUCCESS), HttpStatus.OK);
@@ -31,7 +32,7 @@ public class UserController {
     //회원 탈퇴
     @DeleteMapping("/delete")
     public ResponseEntity deleteUser(@RequestHeader(value = "Authorization") String acTokenRequest,
-                                     @RequestBody String password) {
+                                     @Validated @RequestBody String password) {
         userService.deleteUser(acTokenRequest, password);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_USER), HttpStatus.OK);
@@ -39,7 +40,7 @@ public class UserController {
 
     // 아이디 중복 확인
     @PostMapping("/signup/id")
-    public ResponseEntity duplicateId(String loginId) {
+    public ResponseEntity duplicateId(@RequestBody String loginId) {
         userService.duplicateLoginId(loginId);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_ID), HttpStatus.OK);
@@ -47,7 +48,7 @@ public class UserController {
 
     // 이메일 중복 확인
     @PostMapping("/signup/email")
-    public ResponseEntity duplicateEmail(String email) {
+    public ResponseEntity duplicateEmail(@RequestBody String email) {
         userService.duplicateEmail(email);
 
         return new ResponseEntity(new ApiResponse(SuccessCode.CAN_USE_EMAIL), HttpStatus.OK);
@@ -55,7 +56,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity login(LoginRequest loginRequest) {
+    public ResponseEntity login(@Validated @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);
 
         return new ResponseEntity(loginResponse, HttpStatus.OK);
@@ -131,7 +132,7 @@ public class UserController {
     ) {
 
 
-        userService.reissue(acTokenRequest, rfTokenRequest);
+        TokenResponse tokenResponse = userService.reissue(acTokenRequest, rfTokenRequest);
 
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
