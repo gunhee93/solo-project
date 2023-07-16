@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import project.solo.first.post.dto.CreatePostRequest;
 import project.solo.first.user.domain.User;
 
 import javax.persistence.*;
@@ -77,4 +78,23 @@ public class Post {
         this.modifiedAt = modifiedAt;
     }
 
+    // 게시글 작성
+    public static Post of(CreatePostRequest createPostRequest, User user, Category category) {
+        return Post.builder()
+                .title(createPostRequest.getTitle())
+                .content(createPostRequest.getContent())
+                .category(category)
+                .user(user)
+                .build();
+    }
+
+    // 조회수 up
+    public void addViewCount() {
+        this.count++;
+    }
+
+    // 좋아요
+    public void addLikeCount() {
+        this.like++;
+    }
 }

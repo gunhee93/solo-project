@@ -1,6 +1,7 @@
 package project.solo.first.post.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,15 @@ public class Category {
 
     public void mappingPost(Post post) {
         this.postList.add(post);
+    }
+
+    @Builder
+    public Category(String name) {
+        this.name = name;
+    }
+
+    public static Category of(String name) {
+        return Category.builder()
+                .name(name).build();
     }
 }

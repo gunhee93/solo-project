@@ -29,7 +29,7 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
 
-    private User findById(Long userId) {
+    public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> {
                     throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_USER);
