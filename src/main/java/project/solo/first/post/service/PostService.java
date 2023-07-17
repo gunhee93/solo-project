@@ -1,19 +1,25 @@
 package project.solo.first.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.solo.first.post.domain.Category;
 import project.solo.first.post.domain.Post;
 import project.solo.first.post.dto.CategoryDto;
 import project.solo.first.post.dto.CreatePostRequest;
+import project.solo.first.post.dto.NewestListResponse;
+import project.solo.first.post.dto.NewestPostsDto;
 import project.solo.first.post.repository.CategoryRepository;
 import project.solo.first.post.repository.PostRepository;
 import project.solo.first.user.domain.User;
 import project.solo.first.user.service.UserService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,6 +39,21 @@ public class PostService {
         Post post = Post.of(createPostRequest, user, savedCategory);
         postRepository.save(post);
     }
+
+    public NewestListResponse findPostsNewest(Pageable pageable) {
+        Page<Post> allByNewest = postRepository.findAllByNewest(pageable);
+
+        List<NewestPostsDto> newestPostsDtoList = allByNewest.stream().map(post -> new NewestPostsDto(
+                post.getId(), post.getTitle(), post.getUser().getNickname(), post.getCategory().getName(),
+                post.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm"))
+        )).collect(Collectors.toList());
+
+        NewestListResponse newestListResponse = new NewestListResponse(newestPostsDtoList);
+        return newestListResponse;
+    }
+
+    // 게시판 홈 (최신순)
+
 
 //    public CategoryDto createCategoryRoot() {
 //        Map<Long, List<CategoryDto>> groupingByParent = categoryRepository.findAll()
