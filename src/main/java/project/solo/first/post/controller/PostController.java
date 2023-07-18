@@ -12,6 +12,7 @@ import project.solo.first.common.response.ApiResponse;
 import project.solo.first.post.dto.CreatePostRequest;
 import project.solo.first.post.dto.NewestListResponse;
 import project.solo.first.post.dto.NewestPostsDto;
+import project.solo.first.post.dto.ViewedListResponse;
 import project.solo.first.post.service.PostService;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class PostController {
 
     private final PostService postService;
 
+    // 게시글 작성
     @PostMapping("/create")
     public ResponseEntity createPost(@Validated @RequestBody CreatePostRequest createPostRequest) {
         postService.createPost(createPostRequest);
@@ -30,10 +32,19 @@ public class PostController {
         return new ResponseEntity(new ApiResponse(SuccessCode.CREATED_POST), HttpStatus.OK);
     }
 
+    // 게시판 홈(최신순)
     @GetMapping("/newest")
-    public ResponseEntity postsNewest(@PageableDefault(size = 10, sort = {"id"})Pageable pageable) {
+    public ResponseEntity postsNewest(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
         NewestListResponse newestListResponse = postService.findPostsNewest(pageable);
 
         return new ResponseEntity(newestListResponse, HttpStatus.OK);
+    }
+
+    // 게시판 홈(조회순)
+    @GetMapping("/viewed")
+    public ResponseEntity postsViewed(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
+        ViewedListResponse viewedListResponse = postService.findPostsViewed(pageable);
+
+        return new ResponseEntity(viewedListResponse, HttpStatus.OK);
     }
 }

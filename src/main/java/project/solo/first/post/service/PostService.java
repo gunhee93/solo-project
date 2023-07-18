@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.solo.first.post.domain.Category;
 import project.solo.first.post.domain.Post;
-import project.solo.first.post.dto.CategoryDto;
-import project.solo.first.post.dto.CreatePostRequest;
-import project.solo.first.post.dto.NewestListResponse;
-import project.solo.first.post.dto.NewestPostsDto;
+import project.solo.first.post.dto.*;
 import project.solo.first.post.repository.CategoryRepository;
 import project.solo.first.post.repository.PostRepository;
 import project.solo.first.user.domain.User;
@@ -44,12 +41,22 @@ public class PostService {
         Page<Post> allByNewest = postRepository.findAllByNewest(pageable);
 
         List<NewestPostsDto> newestPostsDtoList = allByNewest.stream().map(post -> new NewestPostsDto(
-                post.getId(), post.getTitle(), post.getUser().getNickname(), post.getCategory().getName(),
-                post.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm"))
+                post.getId(), post.getCount(), post.getLike(), post.getTitle(), post.getUser().getNickname(),
+                post.getCategory().getName(), post.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm"))
         )).collect(Collectors.toList());
 
-        NewestListResponse newestListResponse = new NewestListResponse(newestPostsDtoList);
-        return newestListResponse;
+        return new NewestListResponse(newestPostsDtoList);
+    }
+
+    public ViewedListResponse findPostsViewed(Pageable pageable) {
+        Page<Post> allByViewed = postRepository.findAllByViewed(pageable);
+
+        List<ViewedPostsDto> viewedPostsDtoList = allByViewed.stream().map(post -> new ViewedPostsDto(
+                post.getId(), post.getCount(), post.getLike(), post.getTitle(), post.getUser().getNickname(),
+                post.getCategory().getName(), post.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm"))
+        )).collect(Collectors.toList());
+
+        return new ViewedListResponse(viewedPostsDtoList);
     }
 
     // 게시판 홈 (최신순)
