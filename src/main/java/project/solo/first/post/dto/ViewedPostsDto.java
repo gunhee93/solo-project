@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class NewestPostsDto {
+public class ViewedPostsDto {
 
     private Long postId;
     private Long count;
@@ -14,4 +14,5 @@ public class NewestPostsDto {
     private String category;
     private String nickname;
     private String writeTime;
+
 }
