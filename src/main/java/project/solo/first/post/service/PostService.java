@@ -59,13 +59,14 @@ public class PostService {
         return new ViewedListResponse(viewedPostsDtoList);
     }
 
-    // 게시판 홈 (최신순)
+    public LikesListResponse findPostsLikes(Pageable pageable) {
+        Page<Post> allByLikes = postRepository.findAllByLikes(pageable);
 
+        List<LikesPostsDto> likesPostsDtoList = allByLikes.stream().map(post -> new LikesPostsDto(
+                post.getId(), post.getCount(), post.getLike(), post.getTitle(), post.getUser().getNickname(),
+                post.getCategory().getName(), post.getCreatedAt().format(DateTimeFormatter.ofPattern("MM dd HH:mm"))
+        )).collect(Collectors.toList());
 
-//    public CategoryDto createCategoryRoot() {
-//        Map<Long, List<CategoryDto>> groupingByParent = categoryRepository.findAll()
-//                .stream()
-//                .map(ce -> new CategoryDto(ce.getId(), ce.getName(), ce.getParent()))
-//                .collect(groupingBy(cd -> cd.))
-//    }
+        return new LikesListResponse(likesPostsDtoList);
+    }
 }
