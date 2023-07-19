@@ -9,10 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.solo.first.common.code.SuccessCode;
 import project.solo.first.common.response.ApiResponse;
-import project.solo.first.post.dto.CreatePostRequest;
-import project.solo.first.post.dto.NewestListResponse;
-import project.solo.first.post.dto.NewestPostsDto;
-import project.solo.first.post.dto.ViewedListResponse;
+import project.solo.first.post.dto.*;
 import project.solo.first.post.service.PostService;
 
 import java.util.List;
@@ -46,5 +43,13 @@ public class PostController {
         ViewedListResponse viewedListResponse = postService.findPostsViewed(pageable);
 
         return new ResponseEntity(viewedListResponse, HttpStatus.OK);
+    }
+
+    // 게시판 홈(좋아요순)
+    @GetMapping("/like")
+    public ResponseEntity postsLikes(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
+        LikesListResponse likesListResponse = postService.findPostsLikes(pageable);
+
+        return new ResponseEntity(likesListResponse, HttpStatus.OK);
     }
 }
