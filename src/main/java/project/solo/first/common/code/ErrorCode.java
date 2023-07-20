@@ -19,7 +19,10 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(400, "U003", "중복된 이메일 입니다."),
     NOT_MATCHED_CODE(400, "U004", "인증 코드가 틀렸습니다."),
     NOT_MATCHED_PASSWORD(400, "U005", "비밀번호가 일치하지 않습니다."),
-    NO_MATCHED_INFO(400, "U006", "회원 정보가 일치하지 않습니다.");
+    NO_MATCHED_INFO(400, "U006", "회원 정보가 일치하지 않습니다."),
+
+    // post
+    NOT_FOUND_POST(404, "P001", "게시물이 존재하지 않습니다.");
 
     // 에러 코드 상태 반환
     private final int status;

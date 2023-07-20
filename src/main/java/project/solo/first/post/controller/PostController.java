@@ -29,6 +29,15 @@ public class PostController {
         return new ResponseEntity(new ApiResponse(SuccessCode.CREATED_POST), HttpStatus.OK);
     }
 
+    // 게시글 삭제
+    @DeleteMapping("/delete")
+    public ResponseEntity deletePost(@RequestHeader(value = "Authorization") String acTokenRequest,
+                                     @Validated @RequestBody DeletePostRequest deletePostRequest) {
+        postService.deletePost(acTokenRequest, deletePostRequest);
+    }
+
+    // 게시글 상세
+
     // 게시판 홈(최신순)
     @GetMapping("/newest")
     public ResponseEntity postsNewest(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
@@ -52,4 +61,6 @@ public class PostController {
 
         return new ResponseEntity(likesListResponse, HttpStatus.OK);
     }
+
+
 }
