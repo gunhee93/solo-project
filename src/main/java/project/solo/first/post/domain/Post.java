@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.solo.first.post.dto.CreatePostRequest;
+import project.solo.first.post.dto.UpdatePostRequest;
 import project.solo.first.user.domain.User;
 
 import javax.persistence.*;
@@ -85,6 +86,14 @@ public class Post {
                 .content(createPostRequest.getContent())
                 .category(category)
                 .user(user)
+                .build();
+    }
+
+    // 게시글 수정
+    public static Post updatePost(UpdatePostRequest updatePostRequest) {
+        return Post.builder()
+                .title(updatePostRequest.getTitle())
+                .content(updatePostRequest.getContent())
                 .build();
     }
 

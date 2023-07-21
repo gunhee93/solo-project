@@ -31,12 +31,22 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/delete")
-    public ResponseEntity deletePost(@RequestHeader(value = "Authorization") String acTokenRequest,
-                                     @Validated @RequestBody DeletePostRequest deletePostRequest) {
-        postService.deletePost(acTokenRequest, deletePostRequest);
+    public ResponseEntity deletePost(@Validated @RequestBody DeletePostRequest deletePostRequest) {
+        postService.deletePost(deletePostRequest);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.DELETE_POST), HttpStatus.OK);
+    }
+
+    // 게시글 수정
+    @PatchMapping("/update")
+    public ResponseEntity updatePost(@Validated @RequestBody UpdatePostRequest updatePostRequest) {
+        postService.updatePost(updatePostRequest);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 게시글 상세
+
 
     // 게시판 홈(최신순)
     @GetMapping("/newest")
