@@ -34,6 +34,14 @@ public class PostService {
     private final TokenProvider tokenProvider;
 
 
+    // 게시글 찾기
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> {
+                    throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_POST);
+                });
+    }
+
     // 게시글 작성 (카테고리를 저장하는 과정에서 쿼리가 여러번 나가는 문제 해결 필요)
     public void createPost(CreatePostRequest createPostRequest) {
         User user = userService.findById(createPostRequest.getUserId());
@@ -76,16 +84,20 @@ public class PostService {
         return new LikesListResponse(likesPostsDtoList);
     }
 
-    public void deletePost(String acTokenRequest, DeletePostRequest deletePostRequest) {
-        String accessToken = acTokenRequest.substring(7);
-        Authentication authentication = tokenProvider.getAuthentication(accessToken);
-        String strUserId = authentication.getName();
-        Long userId = Long.parseLong(strUserId);
+    public void deletePost(DeletePostRequest deletePostRequest) {
+//        String accessToken = acTokenRequest.substring(7);
+//        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+//        String strUserId = authentication.getName();
+//        Long userId = Long.parseLong(strUserId);
 
-        Post post = postRepository.findById(deletePostRequest.getPostId()).orElseThrow(() -> {
-            throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_POST);
-        });
+        Post post = findById(deletePostRequest.getPostId());
 
         postRepository.delete(post);
+    }
+
+    public void updatePost(UpdatePostRequest updatePostRequest) {
+        Post post = findById(updatePostRequest.getPostId());
+        
+        Post.updatePost(updatePostRequest.getTitle(), updatePostRequest.getContent());
     }
 }
