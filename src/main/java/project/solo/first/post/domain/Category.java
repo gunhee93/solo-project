@@ -37,4 +37,9 @@ public class Category {
         return Category.builder()
                 .name(name).build();
     }
+
+    public static Category updateCategory(String name) {
+        return Category.builder()
+                .name(name).build();
+    }
 }

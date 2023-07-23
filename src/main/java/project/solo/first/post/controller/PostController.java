@@ -40,9 +40,9 @@ public class PostController {
     // 게시글 수정
     @PatchMapping("/update")
     public ResponseEntity updatePost(@Validated @RequestBody UpdatePostRequest updatePostRequest) {
-        postService.updatePost(updatePostRequest);
+        UpdatePostResponse updatePostResponse = postService.updatePost(updatePostRequest);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(updatePostResponse, HttpStatus.OK);
     }
 
     // 게시글 상세

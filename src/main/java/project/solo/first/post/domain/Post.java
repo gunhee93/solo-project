@@ -90,10 +90,10 @@ public class Post {
     }
 
     // 게시글 수정
-    public static Post updatePost(UpdatePostRequest updatePostRequest) {
+    public static Post updatePost(String title, String content) {
         return Post.builder()
-                .title(updatePostRequest.getTitle())
-                .content(updatePostRequest.getContent())
+                .title(title)
+                .content(title)
                 .build();
     }
 
@@ -106,4 +106,6 @@ public class Post {
     public void addLikeCount() {
         this.like++;
     }
+
+
 }
