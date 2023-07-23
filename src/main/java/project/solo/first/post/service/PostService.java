@@ -95,9 +95,18 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public void updatePost(UpdatePostRequest updatePostRequest) {
+    public UpdatePostResponse updatePost(UpdatePostRequest updatePostRequest) {
+        String updatedTitle = updatePostRequest.getTitle();
+        String updatedContent = updatePostRequest.getContent();
+        String updatedCategory = updatePostRequest.getCategory();
+
         Post post = findById(updatePostRequest.getPostId());
-        
-        Post.updatePost(updatePostRequest.getTitle(), updatePostRequest.getContent());
+        post.updatePost(updatedTitle, updatedContent);
+
+        Category category = categoryRepository.findById(post.getCategory().getId())
+                .orElseThrow(() -> { throw new CustomIllegalStateException(ErrorCode.NOT_FOUND_CATEGORY);});
+        category.updateCategory(updatedCategory);
+
+        return new UpdatePostResponse(updatedTitle, updatedContent, updatedCategory);
     }
 }
