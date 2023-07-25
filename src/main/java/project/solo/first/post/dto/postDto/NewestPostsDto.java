@@ -1,4 +1,4 @@
-package project.solo.first.post.dto;
+package project.solo.first.post.dto.postDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

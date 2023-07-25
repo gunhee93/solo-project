@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import project.solo.first.post.dto.CreatePostRequest;
-import project.solo.first.post.dto.UpdatePostRequest;
+import project.solo.first.post.dto.postDto.CreatePostRequest;
 import project.solo.first.user.domain.User;
 
 import javax.persistence.*;

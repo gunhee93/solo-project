@@ -1,11 +1,11 @@
-package project.solo.first.post.dto;
+package project.solo.first.post.dto.postDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ViewedPostsDto {
+public class LikesPostsDto {
 
     private Long postId;
     private Long count;
@@ -14,5 +14,4 @@ public class ViewedPostsDto {
     private String category;
     private String nickname;
     private String writeTime;
-
 }

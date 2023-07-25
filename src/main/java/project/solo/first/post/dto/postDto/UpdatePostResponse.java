@@ -1,15 +1,13 @@
-package project.solo.first.post.dto;
+package project.solo.first.post.dto.postDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UpdatePostRequest {
+public class UpdatePostResponse {
 
-    private Long postId;
-    private String category;
     private String title;
     private String content;
-
+    private String category;
 }

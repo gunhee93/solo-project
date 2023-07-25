@@ -3,7 +3,6 @@ package project.solo.first.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.solo.first.common.code.ErrorCode;
@@ -11,7 +10,8 @@ import project.solo.first.common.exception.CustomIllegalStateException;
 import project.solo.first.jwt.TokenProvider;
 import project.solo.first.post.domain.Category;
 import project.solo.first.post.domain.Post;
-import project.solo.first.post.dto.*;
+import project.solo.first.post.dto.commentDto.CommentResponse;
+import project.solo.first.post.dto.postDto.*;
 import project.solo.first.post.repository.CategoryRepository;
 import project.solo.first.post.repository.PostRepository;
 import project.solo.first.user.domain.User;
@@ -19,8 +19,6 @@ import project.solo.first.user.service.UserService;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,5 +106,14 @@ public class PostService {
         category.updateCategory(updatedCategory);
 
         return new UpdatePostResponse(updatedTitle, updatedContent, updatedCategory);
+    }
+
+    public ViewPostResponse viewPost(Long postId) {
+        Post post = findById(postId);
+        List<CommentResponse> commentResponseList = post.getComments().stream()
+                .map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
+        post.addViewCount();
+
+        return new ViewPostResponse(post, commentResponseList);
     }
 }
