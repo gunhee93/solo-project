@@ -9,10 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.solo.first.common.code.SuccessCode;
 import project.solo.first.common.response.ApiResponse;
-import project.solo.first.post.dto.*;
+import project.solo.first.post.dto.postDto.*;
 import project.solo.first.post.service.PostService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -46,7 +44,12 @@ public class PostController {
     }
 
     // 게시글 상세
+    @GetMapping("/{postId}")
+    public ResponseEntity viewPost(@PathVariable("postId") Long postId) {
+        ViewPostResponse viewPostResponse = postService.viewPost(postId);
 
+        return new ResponseEntity(viewPostResponse, HttpStatus.OK);
+    }
 
     // 게시판 홈(최신순)
     @GetMapping("/newest")
