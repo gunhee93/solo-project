@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import project.solo.first.post.dto.commentDto.CreateCommentRequest;
 import project.solo.first.user.domain.User;
 
 import javax.persistence.*;
@@ -40,6 +41,14 @@ public class Comment {
     private Long like;
 
     private String comment;
+
+    public static Comment of(CreateCommentRequest createCommentRequest, User user, Post post) {
+        return Comment.builder()
+                .comment(createCommentRequest.getContent())
+                .post(post)
+                .user(user)
+                .build();
+    }
 
     public void mappingPost(Post post) {
         this.post = post;
