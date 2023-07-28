@@ -75,5 +75,18 @@ public class PostController {
         return new ResponseEntity(likesListResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/addLike/{postId}")
+    public ResponseEntity like(@PathVariable("postId") Long postId) {
+        postService.like(postId);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.LIKE_POST_UP), HttpStatus.OK);
+    }
+
+    @GetMapping("/cancelLike/{postId}")
+    public ResponseEntity cancelLike(@PathVariable("postId") Long postId) {
+        postService.cancelLike(postId);
+
+        return new ResponseEntity(new ApiResponse(SuccessCode.LIKE_POST_DOWN), HttpStatus.OK);
+    }
 
 }

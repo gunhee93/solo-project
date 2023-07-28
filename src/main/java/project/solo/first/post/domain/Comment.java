@@ -64,5 +64,11 @@ public class Comment {
         this.comment = comment;
     }
 
+    // 좋아요
+    public void addLikeCount() {
+        this.like++;
+    }
 
+    // 좋아요 취소
+    public void cancelLikeCount() { this.like--; }
 }

@@ -14,9 +14,17 @@ public enum SuccessCode {
     VALIDATED_CODE("ValidatedCode", "인증완료. 비밀번호 변경 페이지로 이동합니다."),
     CHANGE_PASSWORD_SUCCESS("ChangedPassword", "비밀번호가 변경되었습니다."),
     DELETE_USER("Delete", "회원이 삭제되었습니다."),
+
+    // post
     CREATED_POST("CreatePost", "게시글이 등록되었습니다."),
     DELETE_POST("DeletePost", "게시물이 삭제되었습니다"),
-    CREATED_COMMENT("CreateComment", "댓글이 등록되었습니다.");
+    LIKE_POST_UP("LikeUp", "게시물을 좋아합니다."),
+    LIKE_POST_DOWN("LikeDown", "게시글 좋아요 취소."),
+
+    //comment
+    CREATED_COMMENT("CreateComment", "댓글이 등록되었습니다."),
+    LIKE_COMMENT_UP("LikeUp", "댓글을 좋아합니다."),
+    LIKE_COMMENT_DOWN("LikeDown", "댓글 좋아요 취소.");
 
     private final String code;
     private final String message;
