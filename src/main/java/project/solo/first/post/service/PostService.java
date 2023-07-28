@@ -9,6 +9,7 @@ import project.solo.first.common.code.ErrorCode;
 import project.solo.first.common.exception.CustomIllegalStateException;
 import project.solo.first.jwt.TokenProvider;
 import project.solo.first.post.domain.Category;
+import project.solo.first.post.domain.Comment;
 import project.solo.first.post.domain.Post;
 import project.solo.first.post.dto.commentDto.CommentResponse;
 import project.solo.first.post.dto.postDto.*;
@@ -115,5 +116,15 @@ public class PostService {
         post.addViewCount();
 
         return new ViewPostResponse(post, commentResponseList);
+    }
+
+    public void like(Long postId) {
+        Post post = findById(postId);
+        post.addLikeCount();
+    }
+
+    public void cancelLike(Long postId) {
+        Post post = findById(postId);
+        post.cancelLikeCount();
     }
 }

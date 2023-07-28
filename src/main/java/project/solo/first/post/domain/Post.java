@@ -106,5 +106,8 @@ public class Post {
         this.like++;
     }
 
-
+    // 좋아요 취소
+    public void cancelLikeCount() {
+        this.like--;
+    }
 }

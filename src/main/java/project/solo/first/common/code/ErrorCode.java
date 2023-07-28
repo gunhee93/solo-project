@@ -23,7 +23,10 @@ public enum ErrorCode {
 
     // post
     NOT_FOUND_POST(404, "P001", "게시물이 존재하지 않습니다."),
-    NOT_FOUND_CATEGORY(404, "P002", "카테고리가 존재하지 않습니다.");
+    NOT_FOUND_CATEGORY(404, "P002", "카테고리가 존재하지 않습니다."),
+
+    // comment
+    NOT_FOUND_COMMENT(404, "C001", "댓글을 찾을 수 없습니다.");
 
     // 에러 코드 상태 반환
     private final int status;
