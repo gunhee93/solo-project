@@ -40,3 +40,6 @@ Infra
 > - 연결 상태 확인: git remote -v
 > - github 에 푸시: git push -u origin '브랜치 이름'
 > - 다운로드: git pull
+
+## 진행 상황
+> - user, post, comment
